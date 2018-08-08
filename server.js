@@ -219,9 +219,8 @@ if (SIMULATOR_MODE === "true") {
     });
   });
 } else {
-  const nonce = crypto.randomBytes(16).toString('base64');
   app.get('/', function (req, res){
-    res.redirect('/authorize?nonce=' + nonce);
+    res.redirect('/authorize?nonce=' + getNonce());
   });
   app.get('/authorize', function (req, res) {
     // ensure required nonce parameter is provided
@@ -250,6 +249,10 @@ if (SIMULATOR_MODE === "true") {
         res.status(500).send(makeOAuth2ErrorResponse("unknown_error", "unknown error occurred, review logs on the service for more details."));
       });
   });
+}
+
+function getNonce() {
+  return crypto.randomBytes(16).toString('base64');
 }
 
 ////////////////////////////////////////////////////////
